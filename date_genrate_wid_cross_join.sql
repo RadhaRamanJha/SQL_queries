@@ -1,0 +1,29 @@
+-- A Query to geneterate a row for all dates in non-leap year
+SELECT 
+    DATE_ADD('2021-01-01',
+        INTERVAL (ones.num + tens.num + hundreds.num) DAY) dt
+FROM
+    (SELECT 0 num UNION ALL SELECT 1 num UNION ALL SELECT 2 num UNION ALL SELECT 3 num UNION ALL SELECT 4 num UNION ALL SELECT 5 num UNION ALL SELECT 6 num UNION ALL SELECT 7 num UNION ALL SELECT 8 num UNION ALL SELECT 9 num) ones
+        CROSS JOIN
+    (SELECT 0 num UNION ALL SELECT 10 num UNION ALL SELECT 20 num UNION ALL SELECT 30 num UNION ALL SELECT 40 num UNION ALL SELECT 50 num UNION ALL SELECT 60 num UNION ALL SELECT 70 num UNION ALL SELECT 80 num UNION ALL SELECT 90 num) tens
+        CROSS JOIN
+    (SELECT 0 num UNION ALL SELECT 100 num UNION ALL SELECT 200 num UNION ALL SELECT 300 num) hundreds
+WHERE
+    DATE_ADD('2021-01-01',
+        INTERVAL (ones.num + tens.num + hundreds.num) DAY) < '2022-01-01'
+ORDER BY 1;
+
+-- Query to generate one row for each date in a leap year
+SELECT 
+    DATE_ADD('2020-01-01',
+        INTERVAL (ones.num + tens.num + hundreds.num) DAY) dt
+FROM
+    (SELECT 0 num UNION ALL SELECT 1 num UNION ALL SELECT 2 num UNION ALL SELECT 3 num UNION ALL SELECT 4 num UNION ALL SELECT 5 num UNION ALL SELECT 6 num UNION ALL SELECT 7 num UNION ALL SELECT 8 num UNION ALL SELECT 9 num) ones
+        CROSS JOIN
+    (SELECT 0 num UNION ALL SELECT 10 num UNION ALL SELECT 20 num UNION ALL SELECT 30 num UNION ALL SELECT 40 num UNION ALL SELECT 50 num UNION ALL SELECT 60 num UNION ALL SELECT 70 num UNION ALL SELECT 80 num UNION ALL SELECT 90 num) tens
+        CROSS JOIN
+    (SELECT 0 num UNION ALL SELECT 100 num UNION ALL SELECT 200 num UNION ALL SELECT 300 num) hundreds
+WHERE
+    DATE_ADD('2020-01-01',
+        INTERVAL (ones.num + tens.num + hundreds.num) DAY) < '2021-01-01'
+ORDER BY 1;
