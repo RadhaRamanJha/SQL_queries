@@ -12,7 +12,6 @@ WHERE
     DATE_ADD('2021-01-01',
         INTERVAL (ones.num + tens.num + hundreds.num) DAY) < '2022-01-01'
 ORDER BY 1;
-
 -- Query to generate one row for each date in a leap year
 SELECT 
     DATE_ADD('2020-01-01',
