@@ -76,7 +76,7 @@ SELECT
 FROM
     rental
 WHERE
-    '2005-02-01' < rental_date < '2005-11-01'
+    '2005-02-01' < rental_date AND rental_date < '2005-11-01'
 GROUP BY MONTHNAME(rental_date)
 ORDER BY tot_rentals;
 -- Transforming the above result set so that only one row is returned 
@@ -103,6 +103,180 @@ SELECT
     END) july_rentals
 FROM
     rental
--- when i add this where clause the num_rental for feburary becomes 0 eventhogh first range start from 01 january 
 WHERE
     rental_date BETWEEN '2005-01-01' AND '2005-12-01';
+-- using conditional logic to check the ratings of films in which actors have appeared
+SELECT 
+    CONCAT(a.first_name, ' ', a.last_name) full_name,
+    CASE
+        WHEN
+            EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'G'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'G_rating_appearence',
+    CASE
+        WHEN
+            EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'PG'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'PG_rating_appearence',
+    CASE
+        WHEN
+            EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'PG-13'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'PG-13_rating_appearence',
+    CASE
+        WHEN
+            EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'R'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'R_rating_appearence',
+    CASE
+        WHEN
+            EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'NC-17'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'NC-17_rating_appearence'
+FROM
+    actor a;
+-- all actors have appeared in all film rating groups verifying that using 'NOT EXITS' Operator
+SELECT 
+    CONCAT(a.first_name, ' ', a.last_name) full_name,
+    CASE
+        WHEN
+            NOT EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'G'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'G_rating_appearence',
+    CASE
+        WHEN
+            NOT EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'PG'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'PG_rating_appearence',
+    CASE
+        WHEN
+            NOT EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'PG-13'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'PG-13_rating_appearence',
+    CASE
+        WHEN
+            NOT EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'R'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'R_rating_appearence',
+    CASE
+        WHEN
+            NOT EXISTS( SELECT 
+                    1
+                FROM
+                    film_actor fa
+                        INNER JOIN
+                    film f ON fa.film_id = f.film_id
+                WHERE
+                    ((fa.actor_id = a.actor_id)
+                        AND f.rating = 'NC-17'))
+        THEN
+            'Y'
+        ELSE 'N'
+    END 'NC-17_rating_appearence'
+FROM
+    actor a;
+-- The customer fname lname sum_payment num_payment and avg_payment
+SELECT 
+    c.first_name,
+    c.last_name,
+    SUM(p.amount) tot_pay,
+    COUNT(p.amount) num_pay,
+    SUM(p.amount) / CASE
+        WHEN COUNT(p.amount) = 0 THEN 1
+        ELSE COUNT(p.amount)
+    END avg_pay
+FROM
+    customer c
+        LEFT OUTER JOIN
+    payment p ON c.customer_id = p.customer_id
+GROUP BY c.first_name , c.last_name; 
