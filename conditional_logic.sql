@@ -185,87 +185,8 @@ SELECT
     END 'NC-17_rating_appearence'
 FROM
     actor a;
--- all actors have appeared in all film rating groups verifying that using 'NOT EXITS' Operator
-SELECT 
-    CONCAT(a.first_name, ' ', a.last_name) full_name,
-    CASE
-        WHEN
-            NOT EXISTS( SELECT 
-                    1
-                FROM
-                    film_actor fa
-                        INNER JOIN
-                    film f ON fa.film_id = f.film_id
-                WHERE
-                    ((fa.actor_id = a.actor_id)
-                        AND f.rating = 'G'))
-        THEN
-            'Y'
-        ELSE 'N'
-    END 'G_rating_appearence',
-    CASE
-        WHEN
-            NOT EXISTS( SELECT 
-                    1
-                FROM
-                    film_actor fa
-                        INNER JOIN
-                    film f ON fa.film_id = f.film_id
-                WHERE
-                    ((fa.actor_id = a.actor_id)
-                        AND f.rating = 'PG'))
-        THEN
-            'Y'
-        ELSE 'N'
-    END 'PG_rating_appearence',
-    CASE
-        WHEN
-            NOT EXISTS( SELECT 
-                    1
-                FROM
-                    film_actor fa
-                        INNER JOIN
-                    film f ON fa.film_id = f.film_id
-                WHERE
-                    ((fa.actor_id = a.actor_id)
-                        AND f.rating = 'PG-13'))
-        THEN
-            'Y'
-        ELSE 'N'
-    END 'PG-13_rating_appearence',
-    CASE
-        WHEN
-            NOT EXISTS( SELECT 
-                    1
-                FROM
-                    film_actor fa
-                        INNER JOIN
-                    film f ON fa.film_id = f.film_id
-                WHERE
-                    ((fa.actor_id = a.actor_id)
-                        AND f.rating = 'R'))
-        THEN
-            'Y'
-        ELSE 'N'
-    END 'R_rating_appearence',
-    CASE
-        WHEN
-            NOT EXISTS( SELECT 
-                    1
-                FROM
-                    film_actor fa
-                        INNER JOIN
-                    film f ON fa.film_id = f.film_id
-                WHERE
-                    ((fa.actor_id = a.actor_id)
-                        AND f.rating = 'NC-17'))
-        THEN
-            'Y'
-        ELSE 'N'
-    END 'NC-17_rating_appearence'
-FROM
-    actor a;
--- The customer fname lname sum_payment num_payment and avg_payment
+    
+-- Avoiding division by 0 error by using conditional logic
 SELECT 
     c.first_name,
     c.last_name,
@@ -279,4 +200,28 @@ FROM
     customer c
         LEFT OUTER JOIN
     payment p ON c.customer_id = p.customer_id
-GROUP BY c.first_name , c.last_name; 
+GROUP BY c.first_name , c.last_name;
+-- counting the film categories
+SELECT 
+    SUM(CASE
+        WHEN rating = 'G' THEN 1
+        ELSE 0
+    END) 'G',
+    SUM(CASE
+        WHEN rating = 'PG' THEN 1
+        ELSE 0
+    END) 'PG',
+    SUM(CASE
+        WHEN rating = 'PG-13' THEN 1
+        ELSE 0
+    END) 'PG-13',
+    SUM(CASE
+        WHEN rating = 'R' THEN 1
+        ELSE 0
+    END) 'R',
+    SUM(CASE
+        WHEN rating = 'NC-17' THEN 1
+        ELSE 0
+    END) 'NC-17'
+FROM
+    film;
