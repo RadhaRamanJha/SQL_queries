@@ -50,3 +50,22 @@ FROM
         address
     INNER JOIN city ON address.city_id = city.city_id
     INNER JOIN country ON country.country_id = city.country_id) addr ON c.address_id = addr.address_id; 
+show tables;
+-- joining same table twice to determine in which film the two actors "Grace Mostel" and "MATTHEW JOHANSSON" appreared
+SELECT 
+    f.title
+FROM
+    film f
+        INNER JOIN
+    film_actor fa1 ON f.film_id = fa1.film_id
+        INNER JOIN
+    actor a1 ON fa1.actor_id = a1.actor_id
+        INNER JOIN
+    film_actor fa2 ON f.film_id = fa2.film_id
+        INNER JOIN
+    actor a2 ON fa2.actor_id = a2.actor_id
+WHERE
+    (a1.first_name = 'GRACE'
+        AND a1.last_name = 'MOSTEL')
+        AND (a2.first_name = 'MATTHEW'
+        AND a2.last_name = 'JOHANSSON');
