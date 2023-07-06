@@ -13,6 +13,7 @@ SELECT
 FROM
     customer
 ORDER BY Activity;
+
 -- using subquery to return an entry based on condition logic
 desc customer;
 desc rental;
@@ -31,6 +32,7 @@ SELECT
     END num_rental
 FROM
     customer c; 
+    
 -- classification of all movies in groups of suitable age veiwer based on category without using else clause using searched case expression
 SELECT 
     title,
@@ -105,6 +107,7 @@ FROM
     rental
 WHERE
     rental_date BETWEEN '2005-01-01' AND '2005-12-01';
+    
 -- using conditional logic to check the ratings of films in which actors have appeared
 SELECT 
     CONCAT(a.first_name, ' ', a.last_name) full_name,
