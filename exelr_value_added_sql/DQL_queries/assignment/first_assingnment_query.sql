@@ -2,12 +2,12 @@
 -- brute force method
 use company_db;
 SELECT 
-    fname, bdate
+    fname name, bdate DOB
 FROM
     employee
 WHERE
-    ('1940-01-01' <= bdate
-        AND bdate <= '1960-12-31');
+    ('1940-01-01' <= bdate)
+        AND (bdate <= '1960-12-31');
 -- Without selecting the database AND using year() function
 SELECT 
     fname, bdate

@@ -1,4 +1,4 @@
-use sakila;
+use company_db;
 # select details from all employess 
 SELECT 
     *
@@ -24,27 +24,25 @@ SELECT DISTINCT
     dno
 FROM
     company_db.employee;
-select * from dependent;
-select distinct relationship from dependent;
-select * from employee;
-select fname name, lname title from employee;
-select * from employee where salary >= 30000;
 SELECT 
     *
 FROM
-    employee
-WHERE
-    sex = 'M' AND dno = 4;
-#   
-select * from works_on;
+    dependent;
+-- select distinct relation ship from dependent
+SELECT DISTINCT
+    relationship
+FROM
+    dependent;
+
+-- select all details from works_on if pno = 2 and working hours > 7 
 SELECT 
     *
 FROM
-    works_on
+    company_db.works_on
 WHERE
-    pno = 10 AND hours > 7;
+    pno = 2 AND hours > 7;
     
-# 
+-- Get details about all employee from dept no. 4 or 5
 SELECT 
     *
 FROM

@@ -2,7 +2,16 @@
 use sakila;
 show tables;
 desc payment;
-select * from payment where (amount in (1.98,7.98,9.98));
+SELECT 
+    *
+FROM
+    payment
+WHERE
+    (amount IN (1.98 , 7.98, 9.98));
 -- a query that finds all customers whose last name contains an A in the second position and a W anywhere after the A.
-desc customer;
-select concat(c.first_name,' ',c.last_name) customer_name from customer c where c.last_name like '_A%W%';
+SELECT 
+    CONCAT(c.first_name, ' ', c.last_name) customer_name
+FROM
+    customer c
+WHERE
+    c.last_name LIKE '_A%W%';
