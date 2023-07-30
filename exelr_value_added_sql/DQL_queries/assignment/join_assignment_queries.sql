@@ -49,3 +49,18 @@ from
 employee e inner join project p
 on e.dno = p.dnum
 where p.plocation = "Houston";
+
+##############################################################################################################
+##############################################################################################################
+############################## Sub-Query Assignment ##########################################################
+##############################################################################################################
+-- select fname of those employees whose pno = 10,1,3 and their working hours is greater than 20  ###########
+use company_db;
+select fname desirable_employee
+from employee
+where 
+ssn in
+(select essn
+from works_on
+where pno in (10,1,3) 
+and hours > 20 );

@@ -3,6 +3,7 @@
 -- year() 
 -- month()
 -- day()
+use company_db;
 SELECT 
     bdate,
     YEAR(bdate) year_bdate,
@@ -54,3 +55,31 @@ SELECT
 FROM
     employee
 GROUP BY dno , sex;
+
+########################## V.V.I #############################################################
+# Having clause applied on aggregated values created by groupby clause
+# because " where " clause is applied only data present in the existing table of data base 
+# if we have to filter ot data based on having clause --
+# we have to place it before group by
+########################## V.V.I #############################################################
+-- Display the Dno of those departments that has 4 employees
+select dno dept_no, count(ssn) num_emp
+from employee
+group by dno
+having num_emp = 4;
+
+-- 
+select dno dept_no, count(ssn) num_emp, max(salary) as max_salary
+from employee
+where sex = "F"
+group by dno
+having  max_salary > 20000
+order by max_salary desc;
+
+# get list of employees whose total working hr is atleast 35 hrs
+desc works_on;
+select essn, sum(hours) tot_wrkng_hrs
+from works_on
+group by essn
+having tot_wrkng_hrs >= 35 
+order by tot_wrkng_hrs desc;

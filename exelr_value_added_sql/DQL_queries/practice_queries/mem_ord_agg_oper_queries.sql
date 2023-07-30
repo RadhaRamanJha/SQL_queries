@@ -102,3 +102,12 @@ SELECT
 FROM
     employee
 GROUP BY gender;
+
+# get number of employee in department 5 
+# check if super_ssn Id is duplicated 
+# min and max working hours in work_on table for project no 2 
+# # sum() 
+# sum of all salary given to all female and male employee 
+# average salary 
+# Check the average of all females and males in all departments
+# calculate standarad deviation of salary for all department # round it to 1,2 places
