@@ -79,3 +79,18 @@ sum(amount) over(partition by(monthname(payment_date))) monthly_payment,
 sum(amount) over() grand_total
 from payment) monthly_payment
 order by pct_total desc;
+-- genrate monthly or grand total for all payments of $10 or higher
+select monthname(payment_date) month_nm,
+amount,
+sum(amount) over(partition by monthname(payment_date)) monthly_total,
+sum(amount) over() grand_total
+from payment
+where amount >= 10
+order by 1;
+-- calculate percentage payment of each month using group by
+select monthname(payment_date) month_name,
+sum(amount) monthly_payment,
+round((sum(amount)/(sum(sum(amount))over()))*100,2) pct_total
+from payment
+group by 1
+order by 1;
