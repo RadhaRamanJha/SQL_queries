@@ -87,10 +87,20 @@ sum(amount) over() grand_total
 from payment
 where amount >= 10
 order by 1;
--- calculate percentage payment of each month using group by
+-- Monthly payment percentage w.r.t total payment reporting
 select monthname(payment_date) month_name,
 sum(amount) monthly_payment,
 round((sum(amount)/(sum(sum(amount))over()))*100,2) pct_total
 from payment
 group by 1
 order by 1;
+-- Monthly payment comparsion reporting
+select monthname(payment_date) month_nm,
+sum(amount) monthly_payment,
+case sum(amount)
+when max(sum(amount)) over() then "Highest"
+when min(sum(amount)) over() then "Lowest"
+else "Medium"
+end "description"
+from payment
+group by month_nm;
