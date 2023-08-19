@@ -104,3 +104,51 @@ else "Medium"
 end "description"
 from payment
 group by month_nm;
+-- use of data frame to calcualte rolling sum of payment for sucsessive year week
+select yearweek(payment_date) payment_week,
+sum(amount) week_payment,
+sum(sum(amount))
+over(order by yearweek(payment_date) rows unbounded preceding) rolling_sum
+from payment 
+group by 
+yearweek(payment_date)
+order by 1;
+-- use of data frame to calcualte rolling sum of payment for sucsessive year month
+select month(payment_date),
+sum(amount) monthly_payment,
+sum(sum(amount))
+ over(order by month(payment_date) rows unbounded preceding) rolling_sum
+ from payment
+ group by 
+ month(payment_date)
+ order by 1;
+-- use data frame to calculate 5-week rolling average of paymwent
+select yearweek(payment_date) year_week,
+sum(amount) weekly_payment,
+avg(sum(amount))
+over(order by yearweek(payment_date)
+ rows between 2 preceding and 2 following) rolling_5wk_avg
+from payment
+group by yearweek(payment_date)
+order by 1;
+-- use data frame window to calculate 7 day average payment 
+select date(payment_date) payment_date,
+sum(amount)  daily_payment,
+round(avg(sum(amount)) over(order by date(payment_date)
+range between interval 3 day preceding
+and interval 3 day following),2) 7_day_avg
+from payment
+where payment_date between '2005-07-01' and '2005-10-01'
+group by date(payment_date)
+order by 1;
+-- use of lag function to calculate the percentage difference in payment from prior week
+select yearweek(payment_date) payment_week,
+sum(amount) week_payment,
+round((sum(amount)-lag(sum(amount),1)
+over(order by yearweek(payment_date)))
+/lag(sum(amount),1)
+over(order by yearweek(payment_date))
+*100,1 ) prcnt_diff
+from payment
+group by yearweek(payment_date)
+order by 1;
