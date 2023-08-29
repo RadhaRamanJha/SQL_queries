@@ -152,3 +152,15 @@ over(order by yearweek(payment_date))
 from payment
 group by yearweek(payment_date)
 order by 1;
+-- Group Value Concatenation
+## not an analytical function
+## used to pivot a set of values
+## in a single delimted string
+## used to generate XML or JSON document
+select f.title movie,
+group_concat(a.last_name order by a.last_name separator ',') actors
+from actor a
+inner join film_actor fa on fa.actor_id = a.actor_id
+inner join film f on f.film_id = fa.film_id
+group by f.title
+having count(*) = 3;
