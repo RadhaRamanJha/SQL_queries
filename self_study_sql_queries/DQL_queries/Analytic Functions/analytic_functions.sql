@@ -1,5 +1,6 @@
 use sakila;
--- using rank() and over() function
+desc rental;
+-- using rank() function
 select quarter(payment_date) quarter,
 monthname(payment_date) sales_month,
 sum(amount) monthly_sales,
@@ -22,7 +23,7 @@ rank() over(order by count(*) desc) rank_rnk,
 dense_rank() over(order by count(*) desc) dense_rank_rnk
 from rental
 group by 1
-order by 2 desc;
+order by 2 desc limit 10;
 -- genetrating rank for every month
 select customer_id, 
 monthname(rental_date) month_name,
