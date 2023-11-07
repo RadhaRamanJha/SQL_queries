@@ -1,4 +1,5 @@
 use sakila;
+desc payment;
 desc rental;
 -- using rank() function
 select quarter(payment_date) quarter,
