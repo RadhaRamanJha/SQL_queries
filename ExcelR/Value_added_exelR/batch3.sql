@@ -208,3 +208,68 @@ select * from myemp where first_name like '% %';
 
 -- selecting employee having first name not starting with a 
 select * from myemp where first_name not like 'a%';
+###### Functions ##################
+### Row level functions of mysql
+# Date add() - function
+create table patients(
+pid int,
+pname varchar(20),
+dob date,
+toa datetime
+);
+insert into patients values (1,'Harry','2000-01-26','2007-12-31 23:59:59');
+select * from patients;
+select adddate(dob, interval 5 day) as result from patients;
+select year(dob),month(dob),monthname(dob) from patients;
+select hire_date,year(hire_date) from myemp limit 5;
+select round(weight) from cats;
+## Group level function
+use newdb;
+select round(avg(weight),2) from cats;
+select sum(weight) from cats;
+select min(weight) from cats;
+select max(weight) from cats;
+select std(weight) from cats;
+select round(std(weight),2) from cats;
+select count(*) from cats;
+select distinct(breed) from cats;
+select count(distinct(breed)) from cats;
+## Group by 
+-- breed wise avg weight
+select breed, round(avg(weight),1) avg_wt from cats group by breed;
+use practicedb5;
+select * from myemp limit 5;
+-- department wise average
+select dep_id, round(avg(salary),2) 
+from myemp group by dep_id;
+-- department wise manager wise average
+select dep_id, mgr_id, avg(salary)
+ from myemp 
+ group by dep_id,mgr_id;
+ 
+ select dep_id, mgr_id, avg(salary)
+ from myemp 
+ group by dep_id,mgr_id;
+
+# Joins
+use newdb;
+select * from movies;
+select * from members;
+-- inner join
+select * from movies inner join members on movies.id = members.movieid;
+# by default inner join is considered
+select * from movies join members on movies.id = members.movieid;
+## Left join
+select * from movies left join members on movies.id = members.movieid;
+## Right join
+select * from movies right join members on movies.id = members.movieid;
+select * from authors;
+select * from books;
+select title,Name 
+from authors inner join books 
+on books.authorid = authors.authorid;
+## Cross join
+select * from meals;
+select * from drinks;
+select m.mealname,d.drinkname,m.rate+d.rate Total_Rate
+from meals m cross join drinks d;
