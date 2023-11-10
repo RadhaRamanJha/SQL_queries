@@ -273,3 +273,50 @@ select * from meals;
 select * from drinks;
 select m.mealname,d.drinkname,m.rate+d.rate Total_Rate
 from meals m cross join drinks d;
+#self join 
+select emp_id, first_name from myemp limit 10;
+select emp.emp_id, emp.first_name Emp_fname,emp.last_name Emp_lname,
+mgr.first_name Mgr_fname,mgr.last_name Mgr_lname
+from myemp emp join myemp mgr
+on emp.mgr_id = mgr.emp_id;
+# Data Base Constraints :- Primary keys, Foreign Keys, Sequence Objects
+# Types of Constarins - 1 Domain Constarints 2. Key constarints
+# 1 Domain Constarints :- Unique, not null, Default, Check
+# 2 Key constarints :- Primary key, Secondary key,
+show tables;
+select * from students;
+insert into students values(1,'tom','mysql',21),(1,'tim','mysql',21);
+drop table students;
+create table students(
+              sid integer unique,
+              sname varchar(20) not null,
+              age integer check(age >18),
+              course varchar(20)
+);
+desc students;
+insert into students values(1,'tom',19,'mysql');
+insert into students values(2,'tammy',19,'mysql');
+select * from students;
+insert into students values(null,'jhon',22,'analytics');
+insert into students values(null,'jim',19,'mysql');
+insert into students values(3,'jhon',17,'analytics');
+insert into students values(3,null,18,'analytics');
+insert into students (sid,age,course) values(3,19,'analytics');
+alter table students modify column sname varchar(20) not null default 'smith';
+insert into students (sid,age,course) values(4,25,'mysql');
+select * from students;
+alter table students modify column sname varchar(20) not null default null;
+select * from authors;
+select * from books;
+drop table authors;
+drop table books;
+create table authors(authorid integer primary key, name varchar(100));
+desc authors;
+create table books(
+				 bookid integer primary key,
+                 title varchar(255),
+                 aid integer, foreign key(aid) references authors(authorid)
+                 on delete cascade on update cascade);
+desc books;
+select * from books;
+select * from authors;
