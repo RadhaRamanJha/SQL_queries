@@ -320,3 +320,86 @@ create table books(
 desc books;
 select * from books;
 select * from authors;
+# Sequence 
+create table test(id integer primary key auto_increment,
+                  name varchar(20),
+                  age integer);
+desc test;
+insert into test (name,age) values ('tom',20);
+insert into test (name,age) values ('jom',20);
+insert into test (name,age) values ('com',20);
+select * from test ;
+truncate test;
+delete from test;
+insert into test values (null,'git',40);
+# trucate deletes the entrie table,sequnce then recreates it 
+alter table test auto_increment = 100 ;
+insert into test (name,age) values ('jom',20);
+select * from test;
+
+# Roll back 
+select * from students;
+insert into students values(5,'harry',44,'dance');
+select * from students;
+
+rollback;
+set autocommit = 0;
+insert into students values(6,'harry',44,'dance');
+select * from students;
+rollback;
+select * from students;
+insert into students values(6,'kate',34,'dance');
+select * from students;
+commit;
+select * from students;
+rollback;
+insert into students values(7,'kate',34,'dance');
+select * from students;
+rollback;
+##
+create table tt(id char);
+insert into tt values('a');
+insert into tt values('b');
+select * from tt;
+delete from tt;
+start transaction;
+insert into tt values('a');
+insert into tt values('b');
+select * from tt;
+rollback;
+select * from tt;
+start transaction;
+insert into tt values('a');
+insert into tt values('b');
+savepoint sb;
+insert into tt values('c');
+insert into tt values('d');
+savepoint sd;
+insert into tt values('e');
+insert into tt values('f');
+select * from tt;
+rollback to sd;
+select * from tt;
+rollback to sb;
+select * from tt;
+commit;
+select * from tt;
+rollback;
+select * from tt;
+
+## Views
+select * from myemp limit 10;
+create view myview as (select first_name,last_name,job_id,salary from myemp limit 5);
+select * from myview;
+
+## View 2
+select mv.title,mn.first_name,mn.last_name from movies mv left join members mn on mv.id = mn.movieid;
+select mv.title,ifnull(mn.first_name,'--') as fname,ifnull(mn.last_name,'--') as lname
+from movies mv left join members mn on mv.id = mn.movieid;
+
+# View Defination 
+create view mov_mem as (
+select mv.title,ifnull(mn.first_name,'--') as fname,ifnull(mn.last_name,'--') as lname
+from movies mv left join members mn on mv.id = mn.movieid
+);
+select * from mov_mem;
