@@ -403,3 +403,33 @@ select mv.title,ifnull(mn.first_name,'--') as fname,ifnull(mn.last_name,'--') as
 from movies mv left join members mn on mv.id = mn.movieid
 );
 select * from mov_mem;
+## Stored Procedure
+call sample();
+-- parameters
+call Proc_auth(5);
+call practicedb5.Proc_auth(5);
+-- if condition
+call proc_if(-465);
+call proc_if(0);
+call two_div(454);
+-- loop along with parameter
+call simpleloop(5);
+call repeat_loop(4);
+-- Exception Handling or Error Handling
+select * from payments;
+desc payments;
+select * from fraud;
+desc fraud;
+call payments(1,2000);
+call payments(2,null);
+call payments(5,5000);
+call payments(6,null);
+
+# Cursors
+-- it is kind of variable where it can hold the complete data of a Table 
+/* Steps -
+1.Declare the cursor
+2. Open Cursor
+3. Fetch Data into cursor
+*/ 
+call cursor_proc()
