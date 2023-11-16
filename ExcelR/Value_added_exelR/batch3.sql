@@ -432,4 +432,15 @@ call payments(6,null);
 2. Open Cursor
 3. Fetch Data into cursor
 */ 
-call cursor_proc()
+call cursor_proc();
+select * from products;
+select * from orders;
+desc orders;
+call new_proc();
+select * from orders;
+delete from orders;
+
+# User Defined Function 
+select * from myemp;
+set global log_bin_trust_function_creators = 1;
+select FIRST_NAME,LAST_NAME,exprience(emp_id) from myemp;
