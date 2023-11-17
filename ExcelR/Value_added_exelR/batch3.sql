@@ -444,3 +444,29 @@ delete from orders;
 select * from myemp;
 set global log_bin_trust_function_creators = 1;
 select FIRST_NAME,LAST_NAME,exprience(emp_id) from myemp;
+
+## Sub-query 
+## Scalar query 
+select * from myemp where salary =
+(select max(salary) from myemp);
+-- Employee with salary greater than average salary overall
+SELECT CONCAT(fIRST_NAME,' ',LAST_NAME) NAME FROM MYEMP WHERE SALARY > (SELECT AVG(SALARY) FROM MYEMP);
+
+## Co-related subquery 
+-- Employee with salary greater than Department wise average salary
+select dep_id, avg(salary) from myemp group by dep_id order by dep_id;
+select * from myemp as e where salary > (select avg(salary) from myemp where dep_id = e.dep_id) order by dep_id;
+
+## Triggers :- 1) Before Insert 2) After Insert 3) Before UpDate 4) After UpDate 5) Before Delete 6) After Delete 
+alter table books add column sales int default 0 ;
+select * from books;
+select * from book_sales;
+update books set sales = sales+3 where bookid =1;
+update books set sales = 5 where bookid =3;
+update books set sales = 3 where bookid =3;
+delete sales from books;
+create table emp (emp_id int,Ename Varchar(30), working_hr int);
+insert into emp values (1,'jhon',30);
+insert into emp values (1,'harry',-30);
+select * from emp;
+insert into emp values (3,'siri',-40);
