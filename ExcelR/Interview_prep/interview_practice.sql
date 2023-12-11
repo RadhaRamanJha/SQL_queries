@@ -82,3 +82,54 @@ on orders.orderNumber=orderdetails.orderNumber
 GROUP BY orderNumber , cu.customerNumber, customerName
 HAVING SUM(priceEach * quantityOrdered) > 60000;
 ;
+
+## Q8 :- 
+/* Find out the name of the sales rep who has handled the customers along with the customer and check details where at least one check is available for a customer */
+select * from customers;
+select * from employees;
+SELECT 
+    c.customerName,
+    CONCAT(e.firstName, ' ', e.lastName) SalesRep
+FROM
+    customers c
+        INNER JOIN
+    employees e ON c.salesRepEmployeeNumber = e.employeeNumber
+WHERE
+    c.creditLimit > 5000;
+
+## Q9 :- 
+/*Find out the list of product codes available under the order number 10123*/ 
+select * from orders;
+select * from products;
+select * from orderdetails;
+SELECT 
+    productCode
+FROM
+    orderdetails
+WHERE
+    orderNumber = 10123;
+
+## Q10 :- 
+/* Get the text description of all the products */
+SELECT 
+    p.productName
+FROM
+    products p
+        INNER JOIN
+    orderdetails o ON p.productCode = o.productCode
+WHERE
+    o.orderNumber = 10123;
+
+## Q11 :- 
+/*Get the order, order details and product name of all the orders*/
+SELECT 
+    o.orderNumber,
+    p.productName,
+    od.quantityOrdered,
+    (od.quantityOrdered * od.priceEach) amount
+FROM
+    orders o
+        INNER JOIN
+    orderdetails od ON o.orderNumber = od.orderNumber
+        INNER JOIN
+    products p ON p.productCode = od.productCode;
