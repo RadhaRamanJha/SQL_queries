@@ -133,3 +133,40 @@ FROM
     orderdetails od ON o.orderNumber = od.orderNumber
         INNER JOIN
     products p ON p.productCode = od.productCode;
+
+
+## Window Functions 
+select * from products;
+## Rank, Dense_Rank and rownumber
+select concat(customerName,' ',contactLastName) Customer_name,
+       phone,
+       rank()over(order by (creditLimit) desc) as "Rank",
+       dense_rank()over(order by (creditLimit) desc) as "Dense_Rank",
+       row_number()over(order by (creditLimit) desc) as "Row number"
+       from customers;
+## Partition by 
+select productName,productLine,
+	   (quantityInStock*buyPrice) estimated_revenue,
+       rank() over(partition by(productLine) 
+       order by (quantityInStock*buyPrice) desc) selling_priority
+       from products;
+
+## ntile 
+select productName,productLine,
+	   (quantityInStock*buyPrice) estimated_revenue,
+       ntile(5) over(partition by(productLine) 
+       order by (quantityInStock*buyPrice) desc) selling_priority
+       from products;
+
+## Lead
+select productName,productLine,
+	   (quantityInStock*buyPrice) estimated_revenue,
+       lead((quantityInStock*buyPrice),2) over(partition by(productLine) 
+       order by (quantityInStock*buyPrice) desc) lead_prduct_2
+       from products;
+## Lag
+select productName,productLine,
+	   (quantityInStock*buyPrice) estimated_revenue,
+       lag((quantityInStock*buyPrice),2,"No Data") over(partition by(productLine) 
+       order by (quantityInStock*buyPrice) desc) lead_prduct_2
+       from products;

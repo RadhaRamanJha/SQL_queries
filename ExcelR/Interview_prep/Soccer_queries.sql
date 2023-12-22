@@ -82,6 +82,24 @@ FROM
         INNER JOIN
     soccer_venue ON soccer_city.city_id = soccer_venue.city_id;
 
+-- 7.	Write a SQL query to find out who scored the first goal of the 2016 European Championship. Return player_name, jersey_no, country_name, goal_time, play_stage, goal_schedule, goal_half.
+SELECT 
+    player_mast.player_name,
+    player_mast.jersey_no,
+    soccer_country.country_name,
+    goal_details.goal_time,
+    goal_details.play_stage,
+    goal_details.goal_schedule,
+    goal_details.goal_half
+FROM
+    goal_details
+        INNER JOIN
+    player_mast ON goal_details.player_id = player_mast.player_id
+        INNER JOIN
+    soccer_country ON player_mast.team_id = soccer_country.country_id
+WHERE
+    goal_details.goal_id = 1;
+
 -- 8.	Write a SQL query to find the referee who managed the opening match. Return referee name, country name.
 select referee_mast.referee_name, soccer_country.country_name
 from referee_mast 
@@ -141,9 +159,47 @@ inner join match_mast
 on  soccer_venue.venue_id = match_mast.venue_id
 where match_mast.play_stage = 'F';
 
+-- 14.	Write a SQL query to count the number of matches played at each venue. Sort the result-set on venue name. Return Venue name, city, and number of matches.
+select sv.venue_name, sc.city, count(mm.match_no) 'matches_num'
+from soccer_city sc
+inner join soccer_venue sv
+on sv.city_id = sc.city_id
+inner join match_mast mm
+on sv.venue_id = mm.venue_id
+group by sv.venue_name,sc.city
+order by sv.venue_name;
 
--- 7.	Write a SQL query to find out who scored the first goal of the 2016 European Championship. Return player_name, jersey_no, country_name, goal_time, play_stage, goal_schedule, goal_half.
+-- 15.	Write a SQL query to find the player who was the first player to be sent off at the tournament EURO cup 2016. Return match Number, country name and player name.
+select pb.match_no, sc.country_name,pm.player_name
+from player_booked pb
+inner join soccer_country sc
+on pb.team_id = sc.country_id
+inner join player_mast pm
+on pm.team_id = sc.country_id
+where pb.sent_off = 'Y'
+and pb.match_no = 1
+order by pb.booking_time limit 1;
 
-####   TO solve #####
+# solution given 
+SELECT match_no, country_name, player_name, 
+booking_time as "sent_off_time", play_schedule, jersey_no
+FROM player_booked a
+JOIN player_mast b
+ON a.player_id=b.player_id
+JOIN soccer_country c
+ON a.team_id=c.country_id
+AND  a.sent_off='Y'
+AND match_no=(
+	SELECT MIN(match_no) 
+	from player_booked)
+ORDER BY match_no,play_schedule,play_half,booking_time;
 
--- 14.	
+
+
+
+
+
+
+
+
+

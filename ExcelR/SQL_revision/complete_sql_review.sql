@@ -65,3 +65,14 @@ insert into students_dup values(1,'Tom',27,'MySQL');
 insert into students_dup(sid,age,course) values(6,35,'DA+DS');
 insert into students_dup(sid,course,age,sname)values(7,'PowerBI',34,'Tina'),(8,'Tableau',36,'Radha'),(9,'Excel',36,'Vina'),(8,'DA+DS+AI',37,'RR Jha');
 select * from students_dup;
+
+## 2. Update 
+update students_dup set sname = 'Akash' where sid = 6;
+update students_dup set course = 'MySQL';
+update students_dup set marks = 85 where sname = "Tom" and course = "MySQL";
+update students set age = 18;
+update students set marks = 50 where std_id < 5;
+select * from students;
+update students set marks = 70 where marks is null;
+
+## 3. Delete
