@@ -67,7 +67,7 @@ GROUP BY YEAR(order_purchase_timestamp);
 
 ## 5. Top 10 Cities with Highest Customer Number
 SELECT 
-    customer_city AS 'Top 5 City',
+    customer_city AS 'Top 10 City',
     COUNT(customer_id) AS 'Customers Num'
 FROM
     olist_customers_dataset
@@ -75,9 +75,9 @@ GROUP BY customer_city
 ORDER BY COUNT(customer_id) DESC
 LIMIT 10;
 
-## 6. Top 5 Cities based on payments
+## 6. Top 10 Cities based on payments
 SELECT 
-    olist_customers_dataset.customer_city AS 'Top 5 City',
+    olist_customers_dataset.customer_city AS 'Top 10 City',
     CONCAT(ROUND(SUM(olist_order_payments_dataset.payment_value) / 1000000,
                     2),
             ' M') 'Payment Value'
@@ -89,7 +89,7 @@ FROM
     olist_order_payments_dataset ON olist_orders_dataset.order_id = olist_order_payments_dataset.order_id
 GROUP BY olist_customers_dataset.customer_city
 ORDER BY SUM(olist_order_payments_dataset.payment_value) DESC
-LIMIT 5;
+LIMIT 10;
 
 ## 7. Select weekday and weekend payment 
 select case when dayofweek(order_purchase_timestamp) in (2,3,4,5,6) then "Weekday"
@@ -130,11 +130,33 @@ ORDER BY COUNT(olist_order_items_dataset.order_id) DESC
 LIMIT 10;
 
 ## 10. Prefered Payment mode
-select payment_type, concat(round((sum(payment_value)/1000000),2),' M') Total_Payment
-from olist_order_payments_dataset
-group by payment_type;
+SELECT 
+    payment_type,
+    CONCAT(ROUND((SUM(payment_value) / 1000000), 2),
+            ' M') Total_Payment
+FROM
+    olist_order_payments_dataset
+GROUP BY payment_type;
 
-## 11. Review Score and Shipping Days
+## 11. Top 10 Product Category With Total Review and Average Review Score
+SELECT 
+    olist_products_dataset.product_category_name,
+    COUNT(olist_order_reviews_dataset.review_id) Total_Reviews, # anything inside count will give total number of rows in that row
+    round(avg(olist_order_reviews_dataset.review_score),2) Avg_Review
+FROM
+    olist_order_reviews_dataset
+    inner join
+    olist_order_items_dataset
+    on olist_order_reviews_dataset.order_id = olist_order_items_dataset.order_id
+    inner join
+    olist_products_dataset
+    on
+    olist_order_items_dataset.product_id = olist_products_dataset.product_id
+GROUP BY (olist_products_dataset.product_category_name)
+ORDER BY Total_Reviews DESC
+limit 10;
+
+## 12. Review Score and Shipping Days
 select olist_order_reviews_dataset.review_score Review_Score,
        round(avg(datediff(order_delivered_customer_date,order_purchase_timestamp))) avg_delivery_days
        from olist_orders_dataset
@@ -143,14 +165,15 @@ select olist_order_reviews_dataset.review_score Review_Score,
 group by Review_Score 
 order by Review_Score desc; 
 
-## 12. Review Scores and Number of Orders
-select review_score Review_Score,
-       count(order_id) Num_Orders
-from olist_order_reviews_dataset
-group by Review_Score 
-order by Review_Score desc; 
+## 13. Review Scores and Number of Orders
+SELECT 
+    review_score Review_Score, COUNT(order_id) Num_Orders
+FROM
+    olist_order_reviews_dataset
+GROUP BY Review_Score
+ORDER BY Review_Score DESC; 
 
-## 13. Total Order and Payment Trend Over Month
+## 14. Total Order and Payment Trend Over Month
 SELECT 
     MONTHNAME(order_purchase_timestamp) Month_Name,
     COUNT(olist_order_payments_dataset.order_id) Order_Num,
